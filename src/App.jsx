@@ -2,7 +2,6 @@
 import { useState } from "react";
 
 function App() {
-  // 1. Product data
   const [products] = useState([
     { id: 1, name: "Laptop", price: 50000, category: "Electronics" },
     { id: 2, name: "Headphones", price: 2000, category: "Electronics" },
@@ -10,14 +9,15 @@ function App() {
     { id: 4, name: "T-Shirt", price: 800, category: "Clothing" },
     { id: 5, name: "Shoes", price: 2500, category: "Clothing" },
     { id: 6, name: "Watch", price: 1200, category: "Accessories" },
+    { id: 7, name: "Shirt", price: 1200, category: "Clothing" },
+    { id: 8, name: "Watch", price: 1200, category: "Accessories" },
+    { id: 9, name: "Iphone", price: 120000, category: "Electronics" },
   ]);
 
-  // 2. State for search, category and sorting
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sort, setSort] = useState("none");
 
-  // 3. Search and filter products
   let filteredProducts = products.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
@@ -29,7 +29,6 @@ function App() {
     return matchesSearch && matchesCategory;
   });
 
-  // 4. Sort products by price
   if (sort === "low") {
     filteredProducts = [...filteredProducts].sort(
       (a, b) => a.price - b.price
@@ -37,66 +36,84 @@ function App() {
   }
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Arial" }}>
-      <h1>Product Listing</h1>
+    <div className="min-h-screen bg-gray-100 px-4 py-8 sm:px-8">
+      <div className="mx-auto max-w-6xl">
 
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="Search product..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+        {/* Heading */}
+        <h1 className="mb-2 text-3xl font-bold text-gray-800">
+          Product Listing
+        </h1>
 
-      {/* Category filter */}
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-      >
-        <option value="All">All Categories</option>
-        <option value="Electronics">Electronics</option>
-        <option value="Clothing">Clothing</option>
-        <option value="Accessories">Accessories</option>
-      </select>
+        <p className="mb-6 text-gray-500">
+          Search, filter and sort your products.
+        </p>
 
-      {/* Price sorting */}
-      <select
-        value={sort}
-        onChange={(e) => setSort(e.target.value)}
-      >
-        <option value="none">Default Order</option>
-        <option value="low">Price: Low to High</option>
-      </select>
+        {/* Search and Filters */}
+        <div className="mb-6 flex flex-col gap-4 rounded-lg bg-white p-5 shadow-sm sm:flex-row">
 
-      <p>Total products: {filteredProducts.length}</p>
+          <input
+            type="text"
+            placeholder="Search product..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full rounded-md border border-gray-300 px-4 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
 
-      {/* Display products */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "15px",
-          marginTop: "20px",
-        }}
-      >
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "20px",
-              }}
-            >
-              <h3>{product.name}</h3>
-              <p>Price: ₹{product.price.toLocaleString("en-IN")}</p>
-              <p>Category: {product.category}</p>
-            </div>
-          ))
-        ) : (
-          <p>No products match your search.</p>
-        )}
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 outline-none focus:border-blue-500 sm:w-56"
+          >
+            <option value="All">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Accessories">Accessories</option>
+          </select>
+
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 outline-none focus:border-blue-500 sm:w-56"
+          >
+            <option value="none">Default Order</option>
+            <option value="low">Price: Low to High</option>
+          </select>
+        </div>
+
+        {/* Product Count */}
+        <p className="mb-4 font-medium text-gray-600">
+          Total products: {filteredProducts.length}
+        </p>
+
+        {/* Product Cards */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              >
+                <h3 className="mb-3 text-xl font-semibold text-gray-800">
+                  {product.name}
+                </h3>
+
+                <p className="mb-3 text-2xl font-bold text-blue-600">
+                  ₹{product.price.toLocaleString("en-IN")}
+                </p>
+
+                <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
+                  {product.category}
+                </span>
+              </div>
+            ))
+          ) : (
+            <p className="col-span-full rounded-lg bg-white p-8 text-center text-gray-500">
+              No products match your search.
+            </p>
+          )}
+
+        </div>
       </div>
     </div>
   );
